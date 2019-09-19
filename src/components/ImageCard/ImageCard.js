@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IMAGE_URL } from '../../constants';
 import { CategoryTags } from './CategoryTags';
 import { CategoryForm } from './CategoryForm';
-import { Button } from 'antd';
+import {Button, Tooltip} from 'antd';
 
 export default function ImageCard({imageObj, categories}) {
     const {id, image} = imageObj;
@@ -29,10 +29,14 @@ export default function ImageCard({imageObj, categories}) {
         <div className="col-md-2 col-sm-3">
             <div className="card">
                 <div className="card-body p-0">
-                    <img key={id} className="img-fluid w-100" src={IMAGE_URL + image.image} alt={image.source_file}/>
+                    <Tooltip title={image.annotation}>
+                        <img key={id} className="img-fluid w-100" src={IMAGE_URL + image.image} alt={image.source_file}/>
+                    </Tooltip>
                     <div className="card-footer">
                         {
-                            categories.map((categoryObj, index) => <CategoryTags key={index} categoryObj={categoryObj} imageId={id} />)
+                            categories.map((categoryObj, index) => <CategoryTags key={`category-tags-${index}-${categoryObj.id}`}
+                                                                                 categoryObj={categoryObj}
+                                                                                 imageObj={imageObj} />)
                         }
                         <Button type={'link'} className="text-primary p-0" href="#" onClick={handleAdd}>Add category</Button>
                         {

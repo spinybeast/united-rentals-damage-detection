@@ -4,7 +4,7 @@ import { addCategory } from '../../actions/api';
 
 export function CategoryForm({value, onRemove, onChange}) {
     function handleAdd() {
-        addCategory(value);
+        addCategory({name: value}).then(category => window.location.reload());
         onRemove();
     }
 

@@ -13,25 +13,30 @@ export function fetchTags(categoryId) {
 }
 
 export function addCategory(category) {
-    console.log('added!' + category);
-    // return postData(API_URL + 'images/' + imageId + '/tags', tag)
+    return postData(API_URL + 'categories', category)
 }
 
-export function addTag(imageId, tag) {
-    return postData(API_URL + 'images/' + imageId + '/tags', tag)
+export function addTag(imageId, categoryId, tag) {
+    return postData(API_URL + 'images/' + imageId + '/tags', {category: categoryId, id: tag})
+}
+
+export function addTagToCategory(categoryId, tag) {
+    return postData(API_URL + 'categories/' + categoryId + '/tags', {id: tag})
 }
 
 export function removeTag(imageId, categoryId, tag) {
     return deleteData(API_URL + 'images/' + imageId + '/tags/' + categoryId + '/' + tag)
 }
 
-function postData(url = '', data = {}) {
+export function removeCategory(categoryId) {
+    return deleteData(API_URL + 'categories/' + categoryId)
+}
 
+function postData(url = '', data = {}) {
     return fetch(url, {...corsParams, method: 'POST', body: JSON.stringify(data)})
-        .then(response =>  response.json());
+        .then(response => response.json());
 }
 
 function deleteData(url = '') {
-    return fetch(url, {method: 'DELETE'})
-        .then(response => response.json());
+    return fetch(url, {...corsParams, method: 'DELETE'});
 }

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Alert, Spin } from "antd";
+import React, {useEffect, useState} from 'react';
+import {Alert, Spin} from "antd";
 
-import { fetchCategories, fetchImages } from './actions/api';
+import {fetchCategories, fetchImages} from './actions/api';
 import ImageCard from './components/ImageCard/ImageCard';
 import Filters from './components/Filters/Filters';
 import * as _ from 'lodash';
@@ -45,7 +45,7 @@ function App() {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-12">
-                        {error && <Alert message="API error" type="danger"/>}
+                        {error && <Alert message="API error" type="error"/>}
                         <Filters groups={groups} onSelectGroup={(value) => {
                             setFilteredImages(_.filter(images, (imageObj => {
                                 if (value === null) {
@@ -55,14 +55,16 @@ function App() {
                             })));
                         }
                         }/>
-                            </div>
-                            {
-                            filteredImages.map((image, index) => <ImageCard key={index} imageObj={image} categories={categories}/>)
-                            }
-                            </div>
-                            </div>
-                            </Spin>
-                            );
-                            }
+                    </div>
+                    {
+                        filteredImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
+                                                                        imageObj={image}
+                                                                        categories={categories}/>)
+                    }
+                </div>
+            </div>
+        </Spin>
+    );
+}
 
-                            export default App;
+export default App;
