@@ -1,0 +1,52 @@
+import React, { useState } from 'react';
+import { IMAGE_URL } from '../../constants';
+import { CategoryTags } from './CategoryTags';
+import { CategoryForm } from './CategoryForm';
+import { Button } from 'antd';
+
+export default function ImageCard({imageObj, categories}) {
+    const {id, image} = imageObj;
+    const [forms, setForms] = useState([]);
+
+    function handleChange(i, event) {
+        const values = [...forms];
+        values[i].value = event.target.value;
+        setForms(values);
+    }
+
+    function handleAdd() {
+        const values = [...forms];
+        values.push({ value: null });
+        setForms(values);
+    }
+
+    function handleRemove(i) {
+        const values = [...forms];
+        values.splice(i, 1);
+        setForms(values);
+    }
+    return (
+        <div className="col-md-2 col-sm-3">
+            <div className="card">
+                <div className="card-body p-0">
+                    <img key={id} className="img-fluid w-100" src={IMAGE_URL + image.image} alt={image.source_file}/>
+                    <div className="card-footer">
+                        {
+                            categories.map((categoryObj, index) => <CategoryTags key={index} categoryObj={categoryObj} imageId={id} />)
+                        }
+                        <Button type={'link'} className="text-primary p-0" href="#" onClick={handleAdd}>Add category</Button>
+                        {
+                            forms.map((form, idx) =>
+                                <CategoryForm
+                                    key={idx}
+                                    value={form.value || ''}
+                                    onChange={e => handleChange(idx, e)}
+                                    onRemove={() => handleRemove(idx)}
+                                />)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
