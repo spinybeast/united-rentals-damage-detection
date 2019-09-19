@@ -12,6 +12,11 @@ export function fetchTags(categoryId) {
     return fetch(API_URL + 'categories/' + categoryId);
 }
 
+export function addCategory(category) {
+    console.log('added!' + category);
+    // return postData(API_URL + 'images/' + imageId + '/tags', tag)
+}
+
 export function addTag(imageId, tag) {
     return postData(API_URL + 'images/' + imageId + '/tags', tag)
 }
@@ -23,7 +28,7 @@ export function removeTag(imageId, categoryId, tag) {
 function postData(url = '', data = {}) {
 
     return fetch(url, {...corsParams, method: 'POST', body: JSON.stringify(data)})
-        .then(response => response.json());
+        .then(response =>  response.json());
 }
 
 function deleteData(url = '') {
