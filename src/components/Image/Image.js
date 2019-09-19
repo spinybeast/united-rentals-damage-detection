@@ -1,6 +1,7 @@
 import React from 'react';
 import { IMAGE_URL } from '../../constants';
 import { Select } from 'antd';
+import {addTag, removeTag} from "../../actions/api";
 
 export default function Image({imageObj, categories}) {
     const {id, image} = imageObj;
@@ -19,7 +20,10 @@ export default function Image({imageObj, categories}) {
                                         {categoryObj.category.name}
                                     </label>
                                     <Select mode="tags" className="w-100" placeholder="Select tags"
-                                            id={categoryObj.category.name}>
+                                            id={categoryObj.category.name}
+                                            onSelect={(value) => addTag(id, value)}
+                                            onDeselect={(value => removeTag(id, categoryObj.id, value))}
+                                    >
                                         {
                                             categoryObj.category.tags.map(tag =>
                                                 <Select.Option value={tag.id}>{tag.id}</Select.Option>
