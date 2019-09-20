@@ -25,6 +25,7 @@ export function CategoryTags({imageObj, categoryObj, getCategories}) {
                     open={open}
                     defaultValue={imageTags.map(tag => tag.id)}
                     onFocus={() => setOpen(true)}
+                    onBlur={() => setOpen(false)}
                     onSelect={(value) => {
                         if (tagsIds.indexOf(value) === -1) {
                             addTagToCategory(categoryObj.id, value).then(() => getCategories())
