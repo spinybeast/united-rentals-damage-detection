@@ -12,6 +12,7 @@ export function GroupBySelect({title, onSelectGroup, disabled}) {
                     <Select.Option value={'group'}>Group</Select.Option>
                     <Select.Option value={'phase'}>Phase</Select.Option>
                     <Select.Option value={'status'}>Status</Select.Option>
+                    <Select.Option value={'category'}>Category</Select.Option>
                 </Select>
             </div>
         </div>

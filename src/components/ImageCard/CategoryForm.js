@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Input } from 'antd';
-import { addCategory } from '../../actions/api';
+import { addCategory } from '../../helpers/api';
 
-export function CategoryForm({value, onRemove, onChange}) {
+export function CategoryForm({value, onRemove, onChange, getCategories}) {
     function handleAdd() {
-        addCategory({name: value, tags: []}).then(category => window.location.reload());
+        addCategory({name: value, tags: []}).then(() => getCategories());
         onRemove();
     }
 

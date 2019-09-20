@@ -4,7 +4,7 @@ import { CategoryTags } from './CategoryTags';
 import { CategoryForm } from './CategoryForm';
 import {Button, Tooltip} from 'antd';
 
-export default function ImageCard({imageObj, categories, secondGroup = false}) {
+export default function ImageCard({imageObj, categories, secondGroup = false, getCategories}) {
     const {id, image} = imageObj;
     const [forms, setForms] = useState([]);
 
@@ -36,7 +36,8 @@ export default function ImageCard({imageObj, categories, secondGroup = false}) {
                         {
                             categories.map((categoryObj, index) => <CategoryTags key={`category-tags-${index}-${categoryObj.id}`}
                                                                                  categoryObj={categoryObj}
-                                                                                 imageObj={imageObj} />)
+                                                                                 imageObj={imageObj}
+                                                                                 getCategories={getCategories}/>)
                         }
                         <Button type={'link'} className="text-primary p-0" href="#" onClick={handleAdd}>Add category</Button>
                         {
@@ -46,6 +47,7 @@ export default function ImageCard({imageObj, categories, secondGroup = false}) {
                                     value={form.value || ''}
                                     onChange={e => handleChange(idx, e)}
                                     onRemove={() => handleRemove(idx)}
+                                    getCategories={getCategories}
                                 />)
                         }
                     </div>

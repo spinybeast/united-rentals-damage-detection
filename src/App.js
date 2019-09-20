@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Spin} from "antd";
-import {fetchCategories, fetchImages} from './actions/api';
+import {fetchCategories, fetchImages} from './helpers/api';
+import {filterByGroup} from './helpers/image';
 import ImageCard from './components/ImageCard/ImageCard';
 import Filters from './components/Filters/Filters';
 import FirstLevel from './components/Groups/FirstLevel'
-import * as _ from 'lodash';
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -12,38 +12,40 @@ function App() {
     const [filteredImages, setFilteredImages] = useState([]);
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(false);
-    const [filter, setFilter] = useState([]);
     const [groupFirstLevel, setGroupFirstLevel] = useState(null);
     const [groupSecondLevel, setGroupSecondLevel] = useState(null);
 
-    useEffect(() => {
+    function getCategories() {
+        fetchCategories()
+            .then(res => res.json())
+            .then(res => {
+                setCategories(res);
+                setLoading(false);
+            })
+            .catch(() => {
+                setError(true);
+                setLoading(false);
+            });
+    }
+
+    function getImages() {
         fetchImages()
             .then(res => res.json())
             .then(res => {
                 setImages(res);
                 setFilteredImages(res);
-                setFilter(_.uniq(res.map(imageObj => imageObj.image.group)));
                 setLoading(false);
             })
             .catch(() => {
                 setError(true);
                 setLoading(false);
             });
-    }, []);
+    }
 
     useEffect(() => {
-        fetchCategories()
-            .then(res => res.json())
-            .then(res => {
-                setCategories(res);
-                setFilter(_.uniq(res.map(categoryObj => categoryObj.category.name)));
-                setLoading(false);
-            })
-            .catch(() => {
-                setError(true);
-                setLoading(false);
-            });
-    }, [images]);
+        getImages();
+        getCategories();
+    }, []);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -52,25 +54,23 @@ function App() {
                 <div className="row">
                     <div className="col-12">
                         {error && <Alert message="API error" type="error"/>}
-                        <Filters groups={filter}
-                                 onSelectGroup={(value) => {
-                                     setFilteredImages(_.filter(images, (imageObj => {
-                                         if (value === null) {
-                                             return true;
-                                         }
-                                         return imageObj.image.group === value
-                                     })));
-                                 }}
+                        <Filters images={images}
+                                 categories={categories}
+                                 onFilter={(value) => setFilteredImages(filterByGroup(images, value))}
                                  groupFirstLevel={groupFirstLevel}
                                  setGroupFirstLevel={setGroupFirstLevel}
                                  setGroupSecondLevel={setGroupSecondLevel}
                         />
                     </div>
                     {
-                        groupFirstLevel ? <FirstLevel images={filteredImages} groupBy={groupFirstLevel} groupBySecond={groupSecondLevel} categories={categories}/> :
-                        filteredImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
-                                                                        imageObj={image}
-                                                                        categories={categories}/>)
+                        groupFirstLevel ? <FirstLevel images={filteredImages} groupBy={groupFirstLevel}
+                                                      groupBySecond={groupSecondLevel} categories={categories}
+                                                      getCategories={getCategories}/> :
+                            filteredImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
+                                                                            imageObj={image}
+                                                                            categories={categories}
+                                                                            getCategories={getCategories}
+                            />)
                     }
                 </div>
             </div>
