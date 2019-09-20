@@ -4,7 +4,7 @@ import { CategoryTags } from './CategoryTags';
 import { CategoryForm } from './CategoryForm';
 import {Button, Tooltip} from 'antd';
 
-export default function ImageCard({imageObj, categories}) {
+export default function ImageCard({imageObj, categories, secondGroup = false}) {
     const {id, image} = imageObj;
     const [forms, setForms] = useState([]);
 
@@ -26,7 +26,7 @@ export default function ImageCard({imageObj, categories}) {
         setForms(values);
     }
     return (
-        <div className="col-md-2 col-sm-3">
+        <div className={secondGroup ? 'col-md-4' : 'col-md-2 col-sm-3'}>
             <div className="card">
                 <div className="card-body p-0">
                     <Tooltip title={image.annotation}>

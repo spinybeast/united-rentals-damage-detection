@@ -2,6 +2,7 @@
   "name": "united-rentals-damage-detection",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "antd": "^3.23.3",
     "babel-plugin-import": "^1.12.1",
@@ -11,6 +12,7 @@
     "react": "^16.9.0",
     "react-app-rewired": "^2.1.3",
     "react-dom": "^16.9.0",
+    "react-hooks-global-state": "^0.14.0",
     "react-scripts": "3.1.1"
   },
   "scripts": {

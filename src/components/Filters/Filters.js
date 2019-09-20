@@ -2,7 +2,7 @@ import React from 'react';
 import { Select } from 'antd';
 import { GroupBySelect } from './GroupBySelect';
 
-export default function Filters({groups, onSelectGroup}) {
+export default function Filters({groups, onSelectGroup, setGroupFirstLevel, setGroupSecondLevel, groupFirstLevel}) {
 
     return (
         <div className="form">
@@ -15,8 +15,8 @@ export default function Filters({groups, onSelectGroup}) {
                     </Select>
                 </div>
             </div>
-            <GroupBySelect title={'Group by 1'}/>
-            <GroupBySelect title={'Group by 2'}/>
+            <GroupBySelect title={'Group first level'} onSelectGroup={setGroupFirstLevel}/>
+            <GroupBySelect title={'Group second level'} onSelectGroup={setGroupSecondLevel} disabled={groupFirstLevel === null}/>
         </div>
     );
 }

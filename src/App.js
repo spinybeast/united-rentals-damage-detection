@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {Alert, Spin} from "antd";
-
 import {fetchCategories, fetchImages} from './actions/api';
 import ImageCard from './components/ImageCard/ImageCard';
 import Filters from './components/Filters/Filters';
+import FirstLevel from './components/Groups/FirstLevel'
 import * as _ from 'lodash';
 
 function App() {
@@ -12,7 +12,9 @@ function App() {
     const [filteredImages, setFilteredImages] = useState([]);
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(false);
-    const [groups, setGroups] = useState([]);
+    const [filter, setFilter] = useState([]);
+    const [groupFirstLevel, setGroupFirstLevel] = useState(null);
+    const [groupSecondLevel, setGroupSecondLevel] = useState(null);
 
     useEffect(() => {
         fetchImages()
@@ -20,17 +22,7 @@ function App() {
             .then(res => {
                 setImages(res);
                 setFilteredImages(res);
-                setGroups(_.uniq(res.map(imageObj => imageObj.image.group)));
-                setLoading(false);
-            })
-            .catch(() => {
-                setError(true);
-                setLoading(false);
-            });
-        fetchCategories()
-            .then(res => res.json())
-            .then(res => {
-                setCategories(res);
+                setFilter(_.uniq(res.map(imageObj => imageObj.image.group)));
                 setLoading(false);
             })
             .catch(() => {
@@ -39,6 +31,20 @@ function App() {
             });
     }, []);
 
+    useEffect(() => {
+        fetchCategories()
+            .then(res => res.json())
+            .then(res => {
+                setCategories(res);
+                setFilter(_.uniq(res.map(categoryObj => categoryObj.category.name)));
+                setLoading(false);
+            })
+            .catch(() => {
+                setError(true);
+                setLoading(false);
+            });
+    }, [images]);
+
     return (
         <Spin tip="Loading..." spinning={loading}>
             <Alert showIcon={false} message="United rentals damage detection" className="text-center" banner/>
@@ -46,17 +52,22 @@ function App() {
                 <div className="row">
                     <div className="col-12">
                         {error && <Alert message="API error" type="error"/>}
-                        <Filters groups={groups} onSelectGroup={(value) => {
-                            setFilteredImages(_.filter(images, (imageObj => {
-                                if (value === null) {
-                                    return true;
-                                }
-                                return imageObj.image.group === value
-                            })));
-                        }
-                        }/>
+                        <Filters groups={filter}
+                                 onSelectGroup={(value) => {
+                                     setFilteredImages(_.filter(images, (imageObj => {
+                                         if (value === null) {
+                                             return true;
+                                         }
+                                         return imageObj.image.group === value
+                                     })));
+                                 }}
+                                 groupFirstLevel={groupFirstLevel}
+                                 setGroupFirstLevel={setGroupFirstLevel}
+                                 setGroupSecondLevel={setGroupSecondLevel}
+                        />
                     </div>
                     {
+                        groupFirstLevel ? <FirstLevel images={filteredImages} groupBy={groupFirstLevel} groupBySecond={groupSecondLevel} categories={categories}/> :
                         filteredImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
                                                                         imageObj={image}
                                                                         categories={categories}/>)
@@ -68,3 +79,4 @@ function App() {
 }
 
 export default App;
+
