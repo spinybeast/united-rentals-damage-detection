@@ -1,37 +1,36 @@
-import React, { Fragment } from 'react';
-import * as _ from 'lodash';
+import React, {Fragment} from 'react';
 import ImageCard from '../ImageCard/ImageCard';
-import {filterByCategory, filterByField} from "../../helpers/image";
-import {getCategoryName} from "../../helpers/category";
+import {filterByTag, filterByField, getGroups} from "../../helpers/image";
+import {getTagName} from "../../helpers/category";
 
 export default function SecondLevel({images, categories, groupBy, getCategories}) {
-    let isCategory = groupBy === 'category';
-    const groups = isCategory ?
-        categories.map(category => category.id) :
-        _.uniq(images.map(imageObj => imageObj.image[groupBy]));
+    const isCategory = !isNaN(groupBy);
+    const groups = getGroups(groupBy, images, categories);
 
     return (
         <Fragment>
             {
                 groups.map((group, index) => {
                     const groupImages = isCategory ?
-                        filterByCategory(images, group) :
+                        filterByTag(images, group) :
                         filterByField(images, groupBy, group);
 
-                    const colWidth = 12/groups.length;
-                    return <div className={`border-right border-primary col-sm-${colWidth}`} key={index}>
-                            <h5 className="text-center">{isCategory ? getCategoryName(categories, group) : group}</h5>
+                    return groupImages.length > 0 ?
+                        <div className="col-6 p-2" key={index}>
+                            <div className="border border-secondary rounded">
+                            <h5 className="text-center">{isCategory ? getTagName(group) : group}</h5>
                             <div className="row ">
-                            {
+                                {
                                     groupImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
                                                                                  secondGroup={groups.length > 1}
                                                                                  imageObj={image}
                                                                                  categories={categories}
                                                                                  getCategories={getCategories}
                                     />)
-                            }
+                                }
                             </div>
-                        </div>
+                            </div>
+                        </div> : null;
                 })
             }
         </Fragment>

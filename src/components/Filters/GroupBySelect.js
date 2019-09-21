@@ -1,7 +1,7 @@
 import { Select } from 'antd';
 import React from 'react';
 
-export function GroupBySelect({title, onSelectGroup, disabled}) {
+export function GroupBySelect({title, onSelectGroup, disabled, categories}) {
     return (
         <div className="form-group row">
             <label className="col-md-2 col-form-label font-weight-bold" htmlFor="select">{title}</label>
@@ -12,7 +12,9 @@ export function GroupBySelect({title, onSelectGroup, disabled}) {
                     <Select.Option value={'group'}>Group</Select.Option>
                     <Select.Option value={'phase'}>Phase</Select.Option>
                     <Select.Option value={'status'}>Status</Select.Option>
-                    <Select.Option value={'category'}>Category</Select.Option>
+                    {
+                        categories.map(categoryObj => <Select.Option key={categoryObj.id} value={categoryObj.id}>{categoryObj.category.name}</Select.Option>)
+                    }
                 </Select>
             </div>
         </div>
