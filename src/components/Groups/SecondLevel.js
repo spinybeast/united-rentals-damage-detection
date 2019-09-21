@@ -22,7 +22,7 @@ export default function SecondLevel({images, categories, groupBy, getCategories}
                             <div className="row ">
                                 {
                                     groupImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
-                                                                                 secondGroup={groups.length > 1}
+                                                                                 secondGroup={true}
                                                                                  imageObj={image}
                                                                                  categories={categories}
                                                                                  getCategories={getCategories}
