@@ -63,7 +63,7 @@ function App() {
                         />
                     </div>
                     {
-                        groupFirstLevel ? <FirstLevel images={filteredImages} groupBy={groupFirstLevel}
+                        groupFirstLevel !== null ? <FirstLevel images={filteredImages} groupBy={groupFirstLevel}
                                                       groupBySecond={groupSecondLevel} categories={categories}
                                                       getCategories={getCategories}/> :
                             filteredImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}

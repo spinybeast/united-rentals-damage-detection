@@ -1,6 +1,15 @@
-import * as _ from 'lodash';
+import * as _ from "lodash";
 
-export function getCategoryName(categories, id) {
-    const category = _.first(_.filter(categories, category => category.id === id));
-    return category.category.name;
+export function getTagName(filterId) {
+    const [tagId, ] = filterId.split('/');
+    return tagId;
+}
+
+export function tagToFilter(tagObj) {
+    return `${tagObj.id}/${tagObj.category}`;
+}
+
+export function filterToTag(filterId) {
+    const [tagId, categoryId] = filterId.split('/');
+    return {id: tagId, category: parseInt(categoryId)};
 }
