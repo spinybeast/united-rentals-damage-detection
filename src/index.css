@@ -12,7 +12,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+form label {font-weight: bold}
 .anticon {vertical-align: 0 !important;}
 .content {margin-top: 80px}
 .menu {z-index: 1}
-
