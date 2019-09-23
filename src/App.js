@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, Spin} from "antd";
-import {fetchCategories, fetchImages} from './helpers/api';
-import {filterByGroup} from './helpers/image';
+import React, { useEffect, useState } from 'react';
+import { Alert, Spin } from "antd";
+import { fetchCategories, fetchImages } from './helpers/api';
+import { filterByGroup } from './helpers/image';
 import ImageCard from './components/ImageCard/ImageCard';
 import Filters from './components/Filters/Filters';
 import FirstLevel from './components/Groups/FirstLevel'
@@ -49,10 +49,9 @@ function App() {
 
     return (
         <Spin tip="Loading..." spinning={loading}>
-            <Alert showIcon={false} message="United rentals damage detection" className="text-center" banner/>
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-12">
+                    <div className="col-12 position-fixed bg-light menu pb-3 border-bottom">
                         {error && <Alert message="API error" type="error"/>}
                         <Filters images={images}
                                  categories={categories}
@@ -60,12 +59,15 @@ function App() {
                                  groupFirstLevel={groupFirstLevel}
                                  setGroupFirstLevel={setGroupFirstLevel}
                                  setGroupSecondLevel={setGroupSecondLevel}
+                                 getCategories={getCategories}
                         />
                     </div>
+                </div>
+                <div className="row content">
                     {
                         groupFirstLevel !== null ? <FirstLevel images={filteredImages} groupBy={groupFirstLevel}
-                                                      groupBySecond={groupSecondLevel} categories={categories}
-                                                      getCategories={getCategories}/> :
+                                                               groupBySecond={groupSecondLevel} categories={categories}
+                                                               getCategories={getCategories}/> :
                             filteredImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
                                                                             imageObj={image}
                                                                             categories={categories}
@@ -73,6 +75,7 @@ function App() {
                             />)
                     }
                 </div>
+
             </div>
         </Spin>
     );
