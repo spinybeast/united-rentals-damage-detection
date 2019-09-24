@@ -11,7 +11,7 @@ export default function ImageCard({imageObj, categories, secondGroup = false, ge
             <div className="card">
                 <div className="card-body p-0">
                     <img key={id} className="img-fluid w-100" src={src}
-                         alt={image.source_file} onClick={setOpenedImage(src)}/>
+                         alt={image.source_file} onClick={() => setOpenedImage(src)}/>
                     {image.annotation && <div className="px-3">{image.annotation}</div>}
                     <div className="card-footer">
                         {

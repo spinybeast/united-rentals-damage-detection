@@ -16,13 +16,13 @@ export function filterByGroup(images, group) {
         if (group === null) {
             return true;
         }
-        return imageHasGroup(imageObj, group) || imageHasTag(imageObj, group);
+        return imageHasGroup(imageObj, group) || imageHasTagFilter(imageObj, group);
     }))
 }
 
 export function filterByTag(images, tagFilter) {
     return _.filter(images, (imageObj => {
-        return imageHasTag(imageObj, tagFilter)
+        return imageHasTagFilter(imageObj, tagFilter)
     }))
 }
 
@@ -36,12 +36,11 @@ export function imageHasGroup(imageObj, group) {
     return imageObj.image.group === group
 }
 
-export function imageHasCategory(imageObj, categoryId) {
-    const categories = imageObj.image.tags.map(tag => tag.category);
-    return ~categories.indexOf(categoryId);
-}
-
-export function imageHasTag(imageObj, tag) {
+export function imageHasTagFilter(imageObj, tag) {
     const tagObj = filterToTag(tag);
     return _.filter(imageObj.image.tags, (tag => tag.id === tagObj.id && tag.category === tagObj.category)).length > 0;
+}
+
+export function imageHasTag(imageObj, tagId, categoryId) {
+    return _.filter(imageObj.image.tags, (tag => tag.id === tagId && tag.category === categoryId)).length > 0;
 }

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {Alert, Modal, Spin} from "antd";
+import {Alert, Spin} from "antd";
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 import { fetchCategories, fetchImages } from './helpers/api';
 import { filterByGroup } from './helpers/image';
 import ImageCard from './components/ImageCard/ImageCard';
@@ -85,6 +87,8 @@ function App() {
                                                                groupBySecond={groupSecondLevel}
                                                                categories={categories}
                                                                getCategories={getCategories}
+                                                               getImages={getImages}
+                                                               lastImage={lastImage}
                                                                setOpenedImage={setOpenedImage}
                             /> :
                             filteredImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
@@ -96,6 +100,12 @@ function App() {
                     }
                 </div>
             </div>
+            {openedImage !== null && (
+                <Lightbox
+                    mainSrc={openedImage}
+                    onCloseRequest={() => setOpenedImage(null)}
+                />
+            )}
         </Spin>
     );
 }

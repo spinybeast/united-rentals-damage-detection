@@ -9,6 +9,7 @@ export function CategoryTags({imageObj, categoryObj, getCategories}) {
     const imageTags = _.filter(image.tags || [], tag => tag.category === categoryObj.id);
     const tagsIds = category.tags.map(tag => tag.id);
     const [open, setOpen] = useState(false);
+
     return (
         <div>
             <label className="col-form-label pb-0" htmlFor={category.name}>

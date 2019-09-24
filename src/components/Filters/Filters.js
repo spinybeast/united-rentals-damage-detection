@@ -16,7 +16,7 @@ export default function Filters({images, lastImage, setLastImage, categories, on
     const last = _.last(images);
 
     return (
-        <form>
+        <div className="form">
             <div className="form-row">
                 <div className="col">
                     <label htmlFor="select">Select group</label>
@@ -45,6 +45,6 @@ export default function Filters({images, lastImage, setLastImage, categories, on
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     );
 }
