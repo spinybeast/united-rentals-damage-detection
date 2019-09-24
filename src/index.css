@@ -16,3 +16,4 @@ form label {font-weight: bold}
 .anticon {vertical-align: 0 !important;}
 .content {margin-top: 80px}
 .menu {z-index: 1}
+* { animation-duration: 0s !important; }

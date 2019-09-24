@@ -4,7 +4,7 @@ import SecondLevel from './SecondLevel';
 import {filterByTag, filterByField, getGroups} from "../../helpers/image";
 import {getTagName} from "../../helpers/category";
 
-export default function FirstLevel({images, categories, groupBy, groupBySecond, getCategories}) {
+export default function FirstLevel({images, categories, groupBy, groupBySecond, getCategories, setOpenedImage}) {
     const isCategory = !isNaN(groupBy);
     const groups = getGroups(groupBy, images, categories);
 
@@ -21,11 +21,13 @@ export default function FirstLevel({images, categories, groupBy, groupBySecond, 
                         <div className="row bg-light mb-3 py-3" key={index}>
                             {
                                 groupBySecond !== null
-                                    ? <SecondLevel key={`second2-${index}`} images={groupImages} groupBy={groupBySecond} categories={categories} getCategories={getCategories}/> :
+                                    ? <SecondLevel key={`second2-${index}`} images={groupImages} groupBy={groupBySecond} categories={categories} getCategories={getCategories} setOpenedImage={setOpenedImage}/> :
                                     groupImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
                                                                              imageObj={image}
                                                                              categories={categories}
-                                                                                 getCategories={getCategories}/>)
+                                                                                 getCategories={getCategories}
+                                                                                 setOpenedImage={setOpenedImage}
+                                    />)
                             }
                         </div>
                     </Fragment>

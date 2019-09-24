@@ -3,7 +3,7 @@ import ImageCard from '../ImageCard/ImageCard';
 import {filterByTag, filterByField, getGroups} from "../../helpers/image";
 import {getTagName} from "../../helpers/category";
 
-export default function SecondLevel({images, categories, groupBy, getCategories}) {
+export default function SecondLevel({images, categories, groupBy, getCategories, setOpenedImage}) {
     const isCategory = !isNaN(groupBy);
     const groups = getGroups(groupBy, images, categories);
 
@@ -26,6 +26,7 @@ export default function SecondLevel({images, categories, groupBy, getCategories}
                                                                                  imageObj={image}
                                                                                  categories={categories}
                                                                                  getCategories={getCategories}
+                                                                                 setOpenedImage={setOpenedImage}
                                     />)
                                 }
                             </div>

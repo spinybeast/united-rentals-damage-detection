@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Spin } from "antd";
+import {Alert, Modal, Spin} from "antd";
 import { fetchCategories, fetchImages } from './helpers/api';
 import { filterByGroup } from './helpers/image';
 import ImageCard from './components/ImageCard/ImageCard';
@@ -15,6 +15,7 @@ function App() {
     const [error, setError] = useState(false);
     const [groupFirstLevel, setGroupFirstLevel] = useState(null);
     const [groupSecondLevel, setGroupSecondLevel] = useState(null);
+    const [openedImage, setOpenedImage] = useState(null);
 
     function getCategories() {
         fetchCategories()
@@ -79,17 +80,21 @@ function App() {
                 <div className="row content">
                     {error && <Alert className="col-12" message={error} type="error" banner/>}
                     {
-                        groupFirstLevel !== null ? <FirstLevel images={filteredImages} groupBy={groupFirstLevel}
-                                                               groupBySecond={groupSecondLevel} categories={categories}
-                                                               getCategories={getCategories}/> :
+                        groupFirstLevel !== null ? <FirstLevel images={filteredImages}
+                                                               groupBy={groupFirstLevel}
+                                                               groupBySecond={groupSecondLevel}
+                                                               categories={categories}
+                                                               getCategories={getCategories}
+                                                               setOpenedImage={setOpenedImage}
+                            /> :
                             filteredImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
                                                                             imageObj={image}
                                                                             categories={categories}
                                                                             getCategories={getCategories}
+                                                                            setOpenedImage={setOpenedImage}
                             />)
                     }
                 </div>
-
             </div>
         </Spin>
     );

@@ -12,7 +12,7 @@ export function CategoryForm({getCategories}) {
     return (
         <Input.Group compact>
             <Input style={{width: '90%'}} placeholder="Enter category name" value={value}
-                   onChange={(e) => setValue(e.target.value)} onPressEnter={() => handleAdd()}/>
+                   onChange={(e) => setValue(e.target.value)} onPressEnter={handleAdd}/>
             <Button style={{width: '10%'}} icon="check" disabled={!value.length} onClick={() => handleAdd()}/>
         </Input.Group>
     );
