@@ -7,6 +7,7 @@ import Filters from './components/Filters/Filters';
 import FirstLevel from './components/Groups/FirstLevel'
 
 function App() {
+    const [lastImage, setLastImage] = useState(0);
     const [loading, setLoading] = useState(true);
     const [images, setImages] = useState([]);
     const [filteredImages, setFilteredImages] = useState([]);
@@ -19,7 +20,11 @@ function App() {
         fetchCategories()
             .then(res => res.json())
             .then(res => {
-                setCategories(res);
+                if (res.error) {
+                    setError(res.error.message);
+                } else {
+                    setCategories(res);
+                }
                 setLoading(false);
             })
             .catch(() => {
@@ -28,12 +33,17 @@ function App() {
             });
     }
 
-    function getImages() {
-        fetchImages()
+    function getImages(lastImage) {
+        setLoading(true);
+        fetchImages(lastImage)
             .then(res => res.json())
             .then(res => {
-                setImages(res);
-                setFilteredImages(res);
+                if (res.error) {
+                    setError(res.error.message);
+                } else {
+                    setImages(res);
+                    setFilteredImages(res);
+                }
                 setLoading(false);
             })
             .catch(() => {
@@ -43,17 +53,20 @@ function App() {
     }
 
     useEffect(() => {
-        getImages();
         getCategories();
     }, []);
+    useEffect(() => {
+        getImages(lastImage);
+    }, [lastImage]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-12 position-fixed bg-light menu pb-3 border-bottom">
-                        {error && <Alert message="API error" type="error"/>}
                         <Filters images={images}
+                                 lastImage={lastImage}
+                                 setLastImage={setLastImage}
                                  categories={categories}
                                  onFilter={(value) => setFilteredImages(filterByGroup(images, value))}
                                  groupFirstLevel={groupFirstLevel}
@@ -64,6 +77,7 @@ function App() {
                     </div>
                 </div>
                 <div className="row content">
+                    {error && <Alert className="col-12" message={error} type="error" banner/>}
                     {
                         groupFirstLevel !== null ? <FirstLevel images={filteredImages} groupBy={groupFirstLevel}
                                                                groupBySecond={groupSecondLevel} categories={categories}

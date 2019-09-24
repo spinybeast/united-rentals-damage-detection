@@ -1,7 +1,7 @@
-import {API_URL, corsParams} from '../constants';
+import {API_URL, IMAGE_LIMIT, corsParams} from '../constants';
 
-export function fetchImages() {
-    return fetch(API_URL + 'images');
+export function fetchImages(lastImage) {
+    return fetch(API_URL + 'images?after=' + lastImage + '&limit=' + IMAGE_LIMIT);
 }
 
 export function fetchCategories() {

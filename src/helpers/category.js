@@ -1,5 +1,3 @@
-import * as _ from "lodash";
-
 export function getTagName(filterId) {
     const [tagId, ] = filterId.split('/');
     return tagId;
