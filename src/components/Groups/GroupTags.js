@@ -37,9 +37,9 @@ export function GroupTags({images, categoryObj, getCategories, getImages, lastIm
                         if (tagsIds.indexOf(value) === -1) {
                             addTagToCategory(categoryObj.id, value).then(() => getCategories())
                         }
-                        addTagsToAll(images, value).then(() => {getCategories(); getImages(lastImage);});
+                        addTagsToAll(images, value).then(() => getImages(lastImage));
                     }}
-                    onDeselect={value => removeTagFromAll(images, value).then(() => {getCategories(); getImages(lastImage);})}
+                    onDeselect={value => removeTagFromAll(images, value).then(() => getImages(lastImage))}
             >
                 {
                     category.tags && category.tags.map((tag, index) =>
