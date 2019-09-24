@@ -7,7 +7,6 @@ import { CategoryForm } from './CategoryForm';
 import { IMAGE_LIMIT } from '../../constants';
 
 export default function Filters({images, lastImage, setLastImage, categories, onFilter, setGroupFirstLevel, setGroupSecondLevel, groupFirstLevel, getCategories}) {
-    console.log(images);
     const imageFilter = _.uniq(images.map(imageObj => imageObj.image.group));
     const tagsFilter = _.flatten(categories.map(categoryObj => {
         return categoryObj.category.tags.map(tag => {
