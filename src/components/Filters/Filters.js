@@ -15,7 +15,6 @@ export default function Filters({images, lastImage, setLastImage, categories, on
         })
     }));
     const last = _.last(images);
-    const first = _.first(images);
 
     return (
         <form>
