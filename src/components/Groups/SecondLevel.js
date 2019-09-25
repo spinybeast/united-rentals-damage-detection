@@ -3,10 +3,12 @@ import ImageCard from '../ImageCard/ImageCard';
 import {filterByTag, filterByField, getGroups} from "../../helpers/image";
 import {getTagName} from "../../helpers/category";
 import { GroupTags } from './GroupTags';
+import { useQueryParams, deserializer, serializer } from '../../hooks/useQueryParams';
 
-export default function SecondLevel({images, categories, groupBy, getCategories, getImages, lastImage, setOpenedImage}) {
-    const isCategory = !isNaN(groupBy);
-    const groups = getGroups(groupBy, images, categories);
+export default function SecondLevel({images, categories, getCategories, getImages, setOpenedImage}) {
+    const [params,] = useQueryParams(deserializer, serializer);
+    const isCategory = !isNaN(params.group2);
+    const groups = getGroups(params.group2, images, categories);
 
     return (
         <Fragment>
@@ -14,7 +16,7 @@ export default function SecondLevel({images, categories, groupBy, getCategories,
                 groups.map((group, index) => {
                     const groupImages = isCategory ?
                         filterByTag(images, group) :
-                        filterByField(images, groupBy, group);
+                        filterByField(images, params.group2, group);
 
                     return groupImages.length > 0 ?
                         <div className="col-6 p-2" key={index}>
@@ -27,7 +29,6 @@ export default function SecondLevel({images, categories, groupBy, getCategories,
                                         images={images}
                                         getCategories={getCategories}
                                         getImages={getImages}
-                                        lastImage={lastImage}
                                     />)
                                 }
                                 </div>

@@ -4,7 +4,7 @@ import { addTag, addTagToCategory, removeTag } from '../../helpers/api';
 import { imageHasTag } from '../../helpers/image';
 import * as _ from 'lodash';
 
-export function GroupTags({images, categoryObj, getCategories, getImages, lastImage}) {
+export function GroupTags({images, categoryObj, getCategories, getImages}) {
     const {category} = categoryObj;
     const tagsIds = category.tags.map(tag => tag.id);
     let commonTags = [];
@@ -37,9 +37,9 @@ export function GroupTags({images, categoryObj, getCategories, getImages, lastIm
                         if (tagsIds.indexOf(value) === -1) {
                             addTagToCategory(categoryObj.id, value).then(() => getCategories())
                         }
-                        addTagsToAll(images, value).then(() => getImages(lastImage));
+                        addTagsToAll(images, value).then(() => getImages());
                     }}
-                    onDeselect={value => removeTagFromAll(images, value).then(() => getImages(lastImage))}
+                    onDeselect={value => removeTagFromAll(images, value).then(() => getImages())}
             >
                 {
                     category.tags && category.tags.map((tag, index) =>

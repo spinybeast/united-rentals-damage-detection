@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react';
 import ImageCard from '../ImageCard/ImageCard';
 import SecondLevel from './SecondLevel';
-import { filterByTag, filterByField, getGroups } from "../../helpers/image";
-import { getTagName } from "../../helpers/category";
+import { filterByTag, filterByField, getGroups } from '../../helpers/image';
+import { getTagName } from '../../helpers/category';
+import { useQueryParams, deserializer, serializer } from '../../hooks/useQueryParams';
 
-export default function FirstLevel({images, categories, groupBy, groupBySecond, getCategories, getImages, lastImage, setOpenedImage}) {
-    const isCategory = !isNaN(groupBy);
-    const groups = getGroups(groupBy, images, categories);
+export default function FirstLevel({images, categories, getCategories, getImages, setOpenedImage}) {
+    const [params,] = useQueryParams(deserializer, serializer);
+    const isCategory = !isNaN(params.group1);
+    const groups = getGroups(params.group1, images, categories);
 
     return (
         <div className="container-fluid">
@@ -14,16 +16,16 @@ export default function FirstLevel({images, categories, groupBy, groupBySecond, 
                 groups.map((group, index) => {
                     const groupImages = isCategory ?
                         filterByTag(images, group) :
-                        filterByField(images, groupBy, group);
+                        filterByField(images, params.group1, group);
 
                     return <Fragment key={`second-${index}`}>
                         <h3 className="text-center">{isCategory ? getTagName(group) : group}</h3>
                         <div className="row bg-light mb-3 py-3" key={index}>
                             {
-                                groupBySecond !== null
-                                    ? <SecondLevel key={`second2-${index}`} images={groupImages} groupBy={groupBySecond}
+                                params.group2 !== null
+                                    ? <SecondLevel key={`second2-${index}`} images={groupImages}
                                                    categories={categories} getCategories={getCategories}
-                                                   getImages={getImages} lastImage={lastImage} setOpenedImage={setOpenedImage}/> :
+                                                   getImages={getImages} setOpenedImage={setOpenedImage}/> :
                                     groupImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
                                                                                  imageObj={image}
                                                                                  categories={categories}

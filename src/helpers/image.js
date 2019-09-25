@@ -2,13 +2,11 @@ import * as _ from "lodash";
 import {filterToTag, tagToFilter} from "./category";
 
 export function getGroups(groupBy, images, categories) {
-    const currentCategory = !isNaN(groupBy) ?
-        _.first(_.filter(categories, (category => category.id === groupBy))) :
-        false;
-
-    return currentCategory ?
-        currentCategory.category.tags.map(tag => tagToFilter({id: tag.id, category: currentCategory.id})) :
-        _.uniq(images.map(imageObj => imageObj.image[groupBy]));
+    if (!isNaN(groupBy)) {
+        const currentCategory =  _.find(categories, ['id', groupBy]);
+        return currentCategory ? currentCategory.category.tags.map(tag => tagToFilter({id: tag.id, category: currentCategory.id})) : [];
+    }
+    return images ? _.uniq(images.map(imageObj => imageObj.image[groupBy])) : [];
 }
 
 export function filterByGroup(images, group) {

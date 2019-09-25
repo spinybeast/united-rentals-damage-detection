@@ -1,19 +1,41 @@
 @import '~bootstrap/dist/css/bootstrap.css';
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-form label {font-weight: bold}
-.anticon {vertical-align: 0 !important;}
-.content {margin-top: 80px}
-.menu {z-index: 1}
-* { animation-duration: 0s !important; }
+
+form label {
+    font-weight: bold
+}
+#root {
+    height: 100vh;
+}
+.anticon {
+    vertical-align: 0 !important;
+}
+
+.content {
+    margin-top: 80px
+}
+
+.menu {
+    z-index: 1
+}
+
+.loading-select .ant-select-selection {
+    background-color: #dc3545 !important
+}
+
+.ant-select * {
+    animation-duration: 0s !important;
+}
