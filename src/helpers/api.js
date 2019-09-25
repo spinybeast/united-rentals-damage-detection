@@ -1,7 +1,8 @@
 import {API_URL, IMAGE_LIMIT, corsParams} from '../constants';
 
-export function fetchImages(after) {
-    return fetch(API_URL + 'images?after=' + after + '&limit=' + IMAGE_LIMIT);
+export function fetchImages(after, filterby, filtervalue) {
+    return fetch(API_URL + 'images?after=' + after + '&filterby=' + filterby +
+        '&filtervalue=' + filtervalue + '&limit=' + IMAGE_LIMIT);
 }
 
 export function fetchCategories() {
@@ -26,6 +27,10 @@ export function removeTag(imageId, categoryId, tag) {
 
 export function removeCategory(categoryId) {
     return deleteData(API_URL + 'categories/' + categoryId)
+}
+
+export function fetchFilters() {
+    return fetch(API_URL + 'attributes');
 }
 
 function postData(url = '', data = {}) {

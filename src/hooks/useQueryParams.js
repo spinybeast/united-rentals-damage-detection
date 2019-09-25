@@ -21,6 +21,8 @@ export const deserializer = (value) => {
         after: value.after ? Number.parseInt(value.after) : 0,
         group1: value.group1 || null,
         group2: value.group2 || null,
+        filterby: value.filterby || null,
+        filtervalue: value.filtervalue || null
     }
 };
 
@@ -28,4 +30,6 @@ export const serializer = (value) => ({
     after: value.after ? value.after.toString() : '0',
     group1: value.group1 ? value.group1.toString() : null,
     group2: value.group2 ? value.group2.toString() : null,
+    filterby: value.filterby ? value.filterby.toString() : null,
+    filtervalue: value.filtervalue ? value.filtervalue.toString() : null,
 });

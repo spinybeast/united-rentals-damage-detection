@@ -14,7 +14,6 @@ function Main() {
 
     const [loading, setLoading] = useState(true);
     const [images, setImages] = useState([]);
-    const [filteredImages, setFilteredImages] = useState([]);
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(false);
     const [openedImage, setOpenedImage] = useState(null);
@@ -39,14 +38,13 @@ function Main() {
 
     function getImages() {
         setLoading(true);
-        fetchImages(params.after)
+        fetchImages(params.after, params.filterby, params.filtervalue)
             .then(res => res.json())
             .then(res => {
                 if (res.error) {
                     setError(res.error.message);
                 } else {
                     setImages(res);
-                    setFilteredImages(res);
                 }
                 setLoading(false);
             })
@@ -60,8 +58,8 @@ function Main() {
          getCategories()
     }, []);
     useEffect(() => {
-        getImages(params.after);
-    }, [params.after]);
+        getImages();
+    }, [params.after, params.filterby, params.filtervalue]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -70,7 +68,6 @@ function Main() {
                     <div className="col-12 position-fixed bg-light menu pb-3 border-bottom">
                         <Filters images={images}
                                  categories={categories}
-                                 onFilter={(value) => setFilteredImages(filterByGroup(images, value))}
                                  getCategories={getCategories}
                         />
                     </div>
@@ -78,13 +75,13 @@ function Main() {
                 <div className="row content">
                     {error && <Alert className="col-12" message={error} type="error" banner/>}
                     {
-                        params.group1 !== null ? <FirstLevel images={filteredImages}
+                        params.group1 !== null ? <FirstLevel images={images}
                                                                categories={categories}
                                                                getCategories={getCategories}
                                                                getImages={getImages}
                                                                setOpenedImage={setOpenedImage}
                             /> :
-                            filteredImages.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
+                            images.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
                                                                             imageObj={image}
                                                                             categories={categories}
                                                                             getCategories={getCategories}

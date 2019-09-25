@@ -9,7 +9,7 @@ export function GroupBySelect({title, value, onSelectGroup, disabled, categories
             <Select className="w-100" value={value} onChange={(value => onSelectGroup(value))} id="select" disabled={disabled}>
                 <Select.Option value={null}>---</Select.Option>
                 {
-                    commonFilters.map(({name, value}) => <Select.Option value={value}>{name}</Select.Option>)
+                    commonFilters.map(({name, value}, index) => <Select.Option key={index} value={value}>{name}</Select.Option>)
                 }
                 {
                     categories.map(categoryObj => <Select.Option key={categoryObj.id} value={categoryObj.id}>{categoryObj.category.name}</Select.Option>)
