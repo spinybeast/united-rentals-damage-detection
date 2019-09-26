@@ -13,7 +13,7 @@ export function CategoryTags({imageObj, categoryObj, getCategories}) {
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         setImageTags(tags.map(tag => tag.id))
-    }, [tags, imageObj]);
+    }, [imageObj]);
     return (
         <div>
             <label className="col-form-label pb-0" htmlFor={category.name}>
