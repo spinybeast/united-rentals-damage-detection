@@ -1,12 +1,24 @@
 import {API_URL, IMAGE_LIMIT, corsParams} from '../constants';
 
+function makeUrlParams(params) {
+    return Object.keys(params).map(key => key + '=' + params[key]).join('&');
+}
+
 export function fetchImages(after, filterby, filtervalue) {
-    return fetch(API_URL + 'images?after=' + after + '&filterby=' + filterby +
-        '&filtervalue=' + filtervalue + '&limit=' + IMAGE_LIMIT);
+    let params = {after, limit: IMAGE_LIMIT};
+    if (filterby && filtervalue) {
+        params = {...params, filterby, filtervalue};
+    }
+
+    return fetch(API_URL + 'images?' + makeUrlParams(params))
+        .then(response => response.json())
+        .catch(err => console.log(err));
 }
 
 export function fetchCategories() {
-    return fetch(API_URL + 'categories');
+    return fetch(API_URL + 'categories')
+        .then(response => response.json())
+        .catch(err => console.log(err));
 }
 
 export function addCategory(category) {
@@ -35,9 +47,11 @@ export function fetchFilters() {
 
 function postData(url = '', data = {}) {
     return fetch(url, {...corsParams, method: 'POST', body: JSON.stringify(data)})
-        .then(response => response.json()).catch(err => console.log(err));
+        .then(response => response.json())
+        .catch(err => console.log(err));
 }
 
 function deleteData(url = '') {
-    return fetch(url, {...corsParams, method: 'DELETE'}).catch(err => console.log(err));
+    return fetch(url, {...corsParams, method: 'DELETE'})
+        .catch(err => console.log(err));
 }

@@ -1,5 +1,6 @@
 import { useQueryParamsFactory } from 'react-router-query-params-hook';
 import qs from 'qs';
+import {omitBy, isNull} from 'lodash-es';
 
 export const useQueryParams = useQueryParamsFactory(
     (queryString) => qs.parse(queryString, {ignoreQueryPrefix: true}),
@@ -23,13 +24,16 @@ export const deserializer = (value) => {
         group2: value.group2 || null,
         filterby: value.filterby || null,
         filtervalue: value.filtervalue || null
-    }
+    };
 };
 
-export const serializer = (value) => ({
-    after: value.after ? value.after.toString() : '0',
-    group1: value.group1 ? value.group1.toString() : null,
-    group2: value.group2 ? value.group2.toString() : null,
-    filterby: value.filterby ? value.filterby.toString() : null,
-    filtervalue: value.filtervalue ? value.filtervalue.toString() : null,
-});
+export const serializer = (value) => {
+    const params = {
+        after: value.after ? value.after.toString() : null,
+        group1: value.group1 ? value.group1.toString() : null,
+        group2: value.group2 ? value.group2.toString() : null,
+        filterby: value.filterby ? value.filterby.toString() : null,
+        filtervalue: value.filtervalue ? value.filtervalue.toString() : null,
+    };
+    return omitBy(params, isNull);
+};

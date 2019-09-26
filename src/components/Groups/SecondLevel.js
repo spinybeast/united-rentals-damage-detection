@@ -26,7 +26,7 @@ export default function SecondLevel({images, categories, getCategories, getImage
                                     categories.map((categoryObj, index) => <GroupTags
                                         key={`group-tags-${index}-${categoryObj.id}`}
                                         categoryObj={categoryObj}
-                                        images={images}
+                                        images={groupImages}
                                         getCategories={getCategories}
                                         getImages={getImages}
                                     />)

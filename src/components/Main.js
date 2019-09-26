@@ -3,7 +3,6 @@ import { Alert, Spin } from "antd";
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import { fetchCategories, fetchImages } from '../helpers/api';
-import { filterByGroup } from '../helpers/image';
 import ImageCard from '../components/ImageCard/ImageCard';
 import Filters from '../components/Filters/Filters';
 import FirstLevel from '../components/Groups/FirstLevel'
@@ -21,7 +20,6 @@ function Main() {
     function getCategories() {
         setLoading(true);
         fetchCategories()
-            .then(res => res.json())
             .then(res => {
                 if (res.error) {
                     setError(res.error.message);
@@ -39,7 +37,6 @@ function Main() {
     function getImages() {
         setLoading(true);
         fetchImages(params.after, params.filterby, params.filtervalue)
-            .then(res => res.json())
             .then(res => {
                 if (res.error) {
                     setError(res.error.message);

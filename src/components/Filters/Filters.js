@@ -33,8 +33,12 @@ export default function Filters({images, categories, getCategories}) {
                             className="w-100"
                             defaultValue={params.filterby ? [params.filterby, params.filtervalue].join('/') : null}
                             onChange={(value => {
-                                const [group, filter] = value.split('/');
-                                setParams({...params, filterby: group, filtervalue: filter})
+                                if (value === null) {
+                                    setParams({...params, after: 0, filterby: null, filtervalue: null})
+                                } else {
+                                    const [group, filter] = value.split('/');
+                                    setParams({...params, after: 0, filterby: group, filtervalue: filter})
+                                }
                             })}>
                         <Select.Option key="filters-null" value={null}>---</Select.Option>
                         {
@@ -50,7 +54,7 @@ export default function Filters({images, categories, getCategories}) {
                         }
                         <Select.OptGroup key="tags" label="tags">
                             {
-                                tagsFilter.map((tag, index) =>
+                                tagsFilter.map(tag =>
                                     <Select.Option key={tag.id} value={'tags/' + tag.id}>
                                         {tag.id}
                                     </Select.Option>)
@@ -61,7 +65,7 @@ export default function Filters({images, categories, getCategories}) {
                 <GroupBySelect title={'Group first level'}
                                value={params.group1}
                                categories={categories}
-                               onSelectGroup={(group) => {
+                               onSelectGroup={group => {
                                    if (group === null) {
                                        setParams({...params, group1: null, group2: null})
                                    } else {

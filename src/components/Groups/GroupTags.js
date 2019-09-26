@@ -2,19 +2,18 @@ import React from 'react';
 import { Select } from 'antd';
 import { addTag, addTagToCategory, removeTag } from '../../helpers/api';
 import { imageHasTag } from '../../helpers/image';
-import * as _ from 'lodash';
+import {filter} from 'lodash-es';
 
 export function GroupTags({images, categoryObj, getCategories, getImages}) {
     const {category} = categoryObj;
     const tagsIds = category.tags.map(tag => tag.id);
     let commonTags = [];
     category.tags.forEach(tag => {
-        const imagesHasTag = _.filter(images, image => imageHasTag(image, tag.id, categoryObj.id));
+        const imagesHasTag = filter(images, image => imageHasTag(image, tag.id, categoryObj.id));
         if (imagesHasTag.length === images.length) {
             commonTags.push(tag.id);
         }
     });
-
     async function addTagsToAll(images, tag) {
         const promises = images.map((imageObj) => addTag(imageObj.id, categoryObj.id, tag));
         return await Promise.all(promises);

@@ -16,7 +16,7 @@ export default function ImageCard({imageObj, categories, secondGroup = false, ge
                     <div className="card-footer">
                         {
                             categories.map((categoryObj, index) => <CategoryTags
-                                key={`category-tags-${index}-${categoryObj.id}`}
+                                key={index}
                                 categoryObj={categoryObj}
                                 imageObj={imageObj}
                                 getCategories={getCategories}/>)
