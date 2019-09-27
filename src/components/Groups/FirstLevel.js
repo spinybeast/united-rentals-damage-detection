@@ -30,6 +30,7 @@ export default function FirstLevel({images, categories, getCategories, getImages
                                                                                  imageObj={image}
                                                                                  categories={categories}
                                                                                  getCategories={getCategories}
+                                                                                 getImages={getImages}
                                                                                  setOpenedImage={setOpenedImage}
                                     />)
                             }

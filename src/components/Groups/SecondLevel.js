@@ -24,7 +24,7 @@ export default function SecondLevel({images, categories, getCategories, getImage
                             <h5 className="text-center">{isCategory ? getTagName(group) : group}</h5>
                                 <div className="row px-2 pb-2 mb-2 border-bottom border-top border-secondary bg-white">{
                                     categories.map((categoryObj, index) => <GroupTags
-                                        key={`group-tags-${index}-${categoryObj.id}`}
+                                        key={index}
                                         categoryObj={categoryObj}
                                         images={groupImages}
                                         getCategories={getCategories}
@@ -39,6 +39,7 @@ export default function SecondLevel({images, categories, getCategories, getImage
                                                                                  imageObj={image}
                                                                                  categories={categories}
                                                                                  getCategories={getCategories}
+                                                                                 getImages={getImages}
                                                                                  setOpenedImage={setOpenedImage}
                                     />)
                                 }

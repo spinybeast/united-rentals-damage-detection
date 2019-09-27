@@ -2,7 +2,7 @@ import React from 'react';
 import {IMAGE_URL} from '../../constants';
 import {CategoryTags} from './CategoryTags';
 
-export default function ImageCard({imageObj, categories, secondGroup = false, getCategories, setOpenedImage}) {
+export default function ImageCard({imageObj, categories, secondGroup = false, getCategories, getImages, setOpenedImage}) {
     const {id, image} = imageObj;
     const src = IMAGE_URL + image.image;
 
@@ -19,7 +19,9 @@ export default function ImageCard({imageObj, categories, secondGroup = false, ge
                                 key={index}
                                 categoryObj={categoryObj}
                                 imageObj={imageObj}
-                                getCategories={getCategories}/>)
+                                getCategories={getCategories}
+                                getImages={getImages}
+                            />)
                         }
                     </div>
                 </div>

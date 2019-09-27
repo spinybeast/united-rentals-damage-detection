@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Alert, Spin } from "antd";
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -6,11 +6,10 @@ import { fetchCategories, fetchImages } from '../helpers/api';
 import ImageCard from '../components/ImageCard/ImageCard';
 import Filters from '../components/Filters/Filters';
 import FirstLevel from '../components/Groups/FirstLevel'
-import {useQueryParams, deserializer, serializer} from '../hooks/useQueryParams';
+import { useQueryParams, deserializer, serializer } from '../hooks/useQueryParams';
 
 function Main() {
-    const [params, ] = useQueryParams(deserializer, serializer);
-
+    const [params,] = useQueryParams(deserializer, serializer);
     const [loading, setLoading] = useState(true);
     const [images, setImages] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -34,7 +33,7 @@ function Main() {
             });
     }
 
-    function getImages() {
+    const getImages = useCallback(() => {
         setLoading(true);
         fetchImages(params.after, params.filterby, params.filtervalue)
             .then(res => {
@@ -49,14 +48,14 @@ function Main() {
                 setError(true);
                 setLoading(false);
             });
-    }
+    }, [params.after, params.filterby, params.filtervalue]);
 
     useEffect(() => {
-         getCategories()
+        getCategories()
     }, []);
     useEffect(() => {
         getImages();
-    }, [params.after, params.filterby, params.filtervalue]);
+    }, [getImages]);
 
     return (
         <Spin tip="Loading..." spinning={loading}>
@@ -73,16 +72,17 @@ function Main() {
                     {error && <Alert className="col-12" message={error} type="error" banner/>}
                     {
                         params.group1 !== null ? <FirstLevel images={images}
-                                                               categories={categories}
-                                                               getCategories={getCategories}
-                                                               getImages={getImages}
-                                                               setOpenedImage={setOpenedImage}
+                                                             categories={categories}
+                                                             getCategories={getCategories}
+                                                             getImages={getImages}
+                                                             setOpenedImage={setOpenedImage}
                             /> :
                             images.map((image, index) => <ImageCard key={`image-${index}-${image.id}`}
-                                                                            imageObj={image}
-                                                                            categories={categories}
-                                                                            getCategories={getCategories}
-                                                                            setOpenedImage={setOpenedImage}
+                                                                    imageObj={image}
+                                                                    categories={categories}
+                                                                    getCategories={getCategories}
+                                                                    getImages={getImages}
+                                                                    setOpenedImage={setOpenedImage}
                             />)
                     }
                 </div>

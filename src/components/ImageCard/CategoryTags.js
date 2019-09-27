@@ -1,19 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Select, Popconfirm } from 'antd';
 import { addTag, addTagToCategory, removeCategory, removeTag } from '../../helpers/api';
-import {filter, without} from 'lodash-es';
+import { filter } from 'lodash-es';
+import { categoryHasTag } from '../../helpers/category';
 
-export function CategoryTags({imageObj, categoryObj, getCategories}) {
+export function CategoryTags({imageObj, categoryObj, getCategories, getImages}) {
     const {category} = categoryObj;
     const {image} = imageObj;
-    const tags = filter(image.tags || [], tag => tag.category === categoryObj.id);
-    const tagsIds = category.tags.map(tag => tag.id);
+    const imageTags = filter(image.tags || [], tag => tag.category === categoryObj.id).map(tag => tag.id);
     const [open, setOpen] = useState(false);
-    const [imageTags, setImageTags] = useState(tags.map(tag => tag.id));
     const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        setImageTags(tags.map(tag => tag.id))
-    }, [imageObj]);
+
+    const onAddTag = (tag) => {
+        setLoading(true);
+        setOpen(false);
+        if (!categoryHasTag(categoryObj, tag)) {
+            addTagToCategory(categoryObj.id, tag).then(() => getCategories())
+        }
+        addTag(imageObj.id, categoryObj.id, tag)
+            .then(() => getImages())
+            .then(() => setLoading(false));
+    };
+
+    const onRemoveTag = (tag) => {
+        setLoading(true);
+        setOpen(false);
+        removeTag(imageObj.id, categoryObj.id, tag)
+            .then(() => getImages())
+            .then(() => setLoading(false));
+    };
+
     return (
         <div>
             <label className="col-form-label pb-0" htmlFor={category.name}>
@@ -31,24 +47,8 @@ export function CategoryTags({imageObj, categoryObj, getCategories}) {
                     value={imageTags}
                     onFocus={() => setOpen(true)}
                     onBlur={() => setOpen(false)}
-                    onSelect={(value) => {
-                        setLoading(true);
-                        if (tagsIds.indexOf(value) === -1) {
-                            addTagToCategory(categoryObj.id, value).then(() => getCategories())
-                        }
-                        addTag(imageObj.id, categoryObj.id, value).then(() => {
-                            setOpen(false);
-                            setLoading(false);
-                            setImageTags(imageTags.concat([value]));
-                        })
-                    }}
-                    onDeselect={(value => {
-                        setLoading(true);
-                        removeTag(imageObj.id, categoryObj.id, value).then(() => {
-                            setImageTags(without(imageTags, value));
-                            setLoading(false);
-                        })
-                    })}
+                    onSelect={value => onAddTag(value)}
+                    onDeselect={value => onRemoveTag(value)}
             >
                 {
                     category.tags && category.tags.map(tag =>

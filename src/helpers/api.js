@@ -1,4 +1,4 @@
-import {API_URL, IMAGE_LIMIT, corsParams} from '../constants';
+import { API_URL, IMAGE_LIMIT, corsParams } from '../constants';
 
 function makeUrlParams(params) {
     return Object.keys(params).map(key => key + '=' + params[key]).join('&');
@@ -35,6 +35,16 @@ export function addTagToCategory(categoryId, tag) {
 
 export function removeTag(imageId, categoryId, tag) {
     return deleteData(API_URL + 'images/' + imageId + '/tags/' + categoryId + '/' + tag)
+}
+
+export async function addTagsToAll(images, categoryId, tag) {
+    const promises = images.map((imageObj) => addTag(imageObj.id, categoryId, tag));
+    return await Promise.all(promises);
+}
+
+export async function removeTagFromAll(images, categoryId, tag) {
+    const promises = images.map((imageObj) => removeTag(imageObj.id, categoryId, tag));
+    return await Promise.all(promises);
 }
 
 export function removeCategory(categoryId) {

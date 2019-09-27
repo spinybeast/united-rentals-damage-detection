@@ -1,28 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Select } from 'antd';
-import { addTag, addTagToCategory, removeTag } from '../../helpers/api';
-import { imageHasTag } from '../../helpers/image';
-import {filter} from 'lodash-es';
+import { addTagToCategory, addTagsToAll, removeTagFromAll } from '../../helpers/api';
+import { getCommonTags } from '../../helpers/category';
 
 export function GroupTags({images, categoryObj, getCategories, getImages}) {
     const {category} = categoryObj;
     const tagsIds = category.tags.map(tag => tag.id);
-    let commonTags = [];
-    category.tags.forEach(tag => {
-        const imagesHasTag = filter(images, image => imageHasTag(image, tag.id, categoryObj.id));
-        if (imagesHasTag.length === images.length) {
-            commonTags.push(tag.id);
-        }
-    });
-    async function addTagsToAll(images, tag) {
-        const promises = images.map((imageObj) => addTag(imageObj.id, categoryObj.id, tag));
-        return await Promise.all(promises);
-    }
-
-    async function removeTagFromAll(images, tag) {
-        const promises = images.map((imageObj) => removeTag(imageObj.id, categoryObj.id, tag));
-        return await Promise.all(promises);
-    }
+    const commonTags = getCommonTags(images, categoryObj);
+    const [open, setOpen] = useState(false);
 
     return (
         <div className="col-3">
@@ -32,17 +17,21 @@ export function GroupTags({images, categoryObj, getCategories, getImages}) {
             <Select mode="tags" className="w-100" placeholder="Select tags"
                     id={category.name}
                     defaultValue={commonTags}
-                    onSelect={(value) => {
+                    open={open}
+                    onFocus={() => setOpen(true)}
+                    onBlur={() => setOpen(false)}
+                    onSelect={value => {
+                        setOpen(false);
                         if (tagsIds.indexOf(value) === -1) {
-                            addTagToCategory(categoryObj.id, value).then(() => getCategories())
+                            addTagToCategory(categoryObj.id, value).then(() => getCategories());
                         }
-                        addTagsToAll(images, value).then(() => getImages());
+                        addTagsToAll(images, categoryObj.id, value).then(() => getImages());
                     }}
-                    onDeselect={value => removeTagFromAll(images, value).then(() => getImages())}
+                    onDeselect={value => removeTagFromAll(images, categoryObj.id, value).then(() => getImages())}
             >
                 {
-                    category.tags && category.tags.map((tag, index) =>
-                        <Select.Option key={`${tag.id}-${index}-${Math.random()}`}
+                    category.tags && category.tags.map(tag =>
+                        <Select.Option key={tag.id}
                                        value={tag.id}>{tag.id}</Select.Option>
                     )
                 }
