@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, Select, Popconfirm } from 'antd';
-import { addTag, addTagToCategory, removeCategory, removeTag } from '../../helpers/api';
+import { addTagToImage, addTagToCategory, removeCategory, removeTagFromImage } from '../../helpers/api';
 import { filter } from 'lodash-es';
 import { categoryHasTag } from '../../helpers/category';
 
@@ -8,24 +8,24 @@ export function CategoryTags({imageObj, categoryObj, getCategories, getImages}) 
     const {category} = categoryObj;
     const {image} = imageObj;
     const imageTags = filter(image.tags || [], tag => tag.category === categoryObj.id).map(tag => tag.id);
-    const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const select = useRef(null);
 
     const onAddTag = (tag) => {
         setLoading(true);
-        setOpen(false);
+        select.current.blur();
         if (!categoryHasTag(categoryObj, tag)) {
             addTagToCategory(categoryObj.id, tag).then(() => getCategories())
         }
-        addTag(imageObj.id, categoryObj.id, tag)
+        addTagToImage(imageObj.id, categoryObj.id, tag)
             .then(() => getImages())
             .then(() => setLoading(false));
     };
 
     const onRemoveTag = (tag) => {
         setLoading(true);
-        setOpen(false);
-        removeTag(imageObj.id, categoryObj.id, tag)
+        select.current.blur();
+        removeTagFromImage(imageObj.id, categoryObj.id, tag)
             .then(() => getImages())
             .then(() => setLoading(false));
     };
@@ -41,12 +41,9 @@ export function CategoryTags({imageObj, categoryObj, getCategories, getImages}) 
                     <Button type={'link'} shape="round" icon={'close'} size={'small'} className="text-muted p-0"/>
                 </Popconfirm>
             </label>
-            <Select mode="tags" className={`w-100${loading ? ' loading-select' : ''}`} placeholder="Select tags"
+            <Select mode="tags" ref={select} className={`w-100${loading ? ' loading-select' : ''}`} placeholder="Select tags"
                     id={category.name}
-                    open={open}
                     value={imageTags}
-                    onFocus={() => setOpen(true)}
-                    onBlur={() => setOpen(false)}
                     onSelect={value => onAddTag(value)}
                     onDeselect={value => onRemoveTag(value)}
             >

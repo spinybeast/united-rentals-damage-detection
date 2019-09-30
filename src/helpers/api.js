@@ -25,7 +25,7 @@ export function addCategory(category) {
     return postData(API_URL + 'categories', category)
 }
 
-export function addTag(imageId, categoryId, tag) {
+export function addTagToImage(imageId, categoryId, tag) {
     return postData(API_URL + 'images/' + imageId + '/tags', {category: categoryId, id: tag})
 }
 
@@ -33,17 +33,17 @@ export function addTagToCategory(categoryId, tag) {
     return postData(API_URL + 'categories/' + categoryId + '/tags', {id: tag})
 }
 
-export function removeTag(imageId, categoryId, tag) {
+export function removeTagFromImage(imageId, categoryId, tag) {
     return deleteData(API_URL + 'images/' + imageId + '/tags/' + categoryId + '/' + tag)
 }
 
 export async function addTagsToAll(images, categoryId, tag) {
-    const promises = images.map((imageObj) => addTag(imageObj.id, categoryId, tag));
+    const promises = images.map((imageObj) => addTagToImage(imageObj.id, categoryId, tag));
     return await Promise.all(promises);
 }
 
 export async function removeTagFromAll(images, categoryId, tag) {
-    const promises = images.map((imageObj) => removeTag(imageObj.id, categoryId, tag));
+    const promises = images.map((imageObj) => removeTagFromImage(imageObj.id, categoryId, tag));
     return await Promise.all(promises);
 }
 
