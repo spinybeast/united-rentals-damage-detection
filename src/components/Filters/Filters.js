@@ -32,6 +32,7 @@ export default function Filters({images, categories, getCategories}) {
                             key="filters"
                             className="w-100"
                             showSearch
+                            optionFilterProp="children"
                             defaultValue={params.filterby ? [params.filterby, params.filtervalue].join('/') : null}
                             onChange={(value => {
                                 if (value === null) {
@@ -44,7 +45,7 @@ export default function Filters({images, categories, getCategories}) {
                         <Select.Option key="filters-null" value={null}>---</Select.Option>
                         {
                             filters.map((filter, index) =>
-                                <Select.OptGroup key={index} label={filter.attribute}>
+                                <Select.OptGroup key={index} label={filter.attribute.toUpperCase()}>
                                     {
                                         filter.values.map((value, index) =>
                                             <Select.Option key={index} value={[filter.attribute, value].join('/')}>
@@ -53,7 +54,7 @@ export default function Filters({images, categories, getCategories}) {
                                     }
                                 </Select.OptGroup>)
                         }
-                        <Select.OptGroup key="tags" label="tags">
+                        <Select.OptGroup key="tags" label="TAG">
                             {
                                 tagsFilter.map(tag =>
                                     <Select.Option key={tag.id} value={'tags/' + tag.id}>
@@ -61,11 +62,19 @@ export default function Filters({images, categories, getCategories}) {
                                     </Select.Option>)
                             }
                         </Select.OptGroup>
-                        <Select.OptGroup key="tag_not_exists" label="tag not exists">
+                        <Select.OptGroup key="no_tag" label="NO TAG">
                             {
                                 tagsFilter.map(tag =>
-                                    <Select.Option key={tag.id} value={'tag_not_exists/' + tag.id}>
+                                    <Select.Option key={tag.id} value={'no_tag/' + tag.id}>
                                         {tag.id}
+                                    </Select.Option>)
+                            }
+                        </Select.OptGroup>
+                        <Select.OptGroup key="no_tag_category" label="NO TAG CATEGORY">
+                            {
+                                categories.map(categoryObj =>
+                                    <Select.Option key={categoryObj.id} value={'no_tag_category/' + categoryObj.id}>
+                                        {categoryObj.category.name}
                                     </Select.Option>)
                             }
                         </Select.OptGroup>
