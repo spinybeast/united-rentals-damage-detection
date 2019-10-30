@@ -31,6 +31,7 @@ export default function Filters({images, categories, getCategories}) {
                     <Select id="select"
                             key="filters"
                             className="w-100"
+                            showSearch
                             defaultValue={params.filterby ? [params.filterby, params.filtervalue].join('/') : null}
                             onChange={(value => {
                                 if (value === null) {
@@ -56,6 +57,14 @@ export default function Filters({images, categories, getCategories}) {
                             {
                                 tagsFilter.map(tag =>
                                     <Select.Option key={tag.id} value={'tags/' + tag.id}>
+                                        {tag.id}
+                                    </Select.Option>)
+                            }
+                        </Select.OptGroup>
+                        <Select.OptGroup key="tag_not_exists" label="tag not exists">
+                            {
+                                tagsFilter.map(tag =>
+                                    <Select.Option key={tag.id} value={'tag_not_exists/' + tag.id}>
                                         {tag.id}
                                     </Select.Option>)
                             }
